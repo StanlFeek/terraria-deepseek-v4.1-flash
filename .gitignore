@@ -1,0 +1,19 @@
+# Runtime / local test artifacts
+node_modules/
+package.json
+package-lock.json
+
+# Large unrelated video/render workspace
+ds_video/
+
+# QA helpers and temporary captures
+tools/
+shot-*.png
+screenshot-*.png
+crop-*.png
+qa-*.png
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
