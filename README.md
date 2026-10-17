@@ -2,6 +2,13 @@
 
 一个纯浏览器运行的 2D 沙盒动作冒险游戏，使用 Canvas 2D 绘制，程序化生成整个世界与全部像素素材，无任何外部图片依赖。界面、物品、对话、任务与聊天均为中文。
 
+## 在线试玩
+
+- 主地址：<https://stanl.top/terraria>
+- 直连地址：<https://stanl.top/terraria-deepseek-v4.1-flash/>
+
+两者是同一个游戏；主地址通过 GitHub Pages 上的全屏入口载入直连地址，地址栏会保持为 `stanl.top/terraria/`。
+
 ## 运行
 
 最简单：直接双击 `index.html`。
