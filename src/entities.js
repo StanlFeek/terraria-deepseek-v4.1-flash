@@ -3,6 +3,9 @@
    Physics is axis-separated pixel collision against World tiles. */
 const ENT = (() => {
   const TS = 16;
+  const PLAYER_W = 20;
+  const PLAYER_H = 32; // exactly two 16 px map tiles
+  const PLAYER_SPRITE_SCALE = PLAYER_H / 42;
   const GRAV = 1320, MAXFALL = 860;
 
   const BUFF_INFO = {
@@ -111,7 +114,7 @@ const ENT = (() => {
   /* ------------------------------------------------------------------ player */
   class Player {
     constructor(game, x, y) {
-      this.w = 20; this.h = 38;
+      this.w = PLAYER_W; this.h = PLAYER_H;
       this.x = x - this.w / 2; this.y = y - this.h;
       this.vx = 0; this.vy = 0;
       this.dir = 1; this.onGround = false; this.coyote = 0; this.jumps = 0; this.jumpBuf = 0;
@@ -345,6 +348,9 @@ const ENT = (() => {
       }
       /* jump / swim / climb */
       if (input.jumpPressed) this.jumpBuf = 0.13;
+      /* Holding jump while grounded jumps again as soon as you land; airborne
+         jumps still require a fresh press (or an accessory-granted air jump). */
+      else if (input.jumpHeld && this.onGround && !this.inWater && !input.down) this.jumpBuf = 0.13;
       const climbTile = tileDef(w.get(Math.floor(this.cx / TS), Math.floor(this.cy / TS)));
       const climbing = climbTile && climbTile.climb && (input.up || input.down);
       if (climbing && !this.inWater) {
@@ -476,9 +482,12 @@ const ENT = (() => {
       const state = this.useTimer > 0 ? (this.mining ? 'mine' : 'swing') : (!this.onGround ? (this.vy < 0 ? 'jump' : 'fall') : (Math.abs(this.vx) > 16 ? 'walk' : 'idle'));
       const img = window.ART.player(state, Math.floor(this.animTime * 10) % 4, this.dir, this.gear);
       if (this.dashTimer > 0) {
+        ctx.save();
         ctx.globalAlpha = 0.25;
-        ctx.drawImage(img, px - img.width / 2 - this.dir * 12, py - img.height);
-        ctx.globalAlpha = 1;
+        ctx.translate(px - this.dir * 12, py);
+        ctx.scale(PLAYER_SPRITE_SCALE, PLAYER_SPRITE_SCALE);
+        ctx.drawImage(img, -img.width / 2, -img.height);
+        ctx.restore();
       }
       if (this.hurtFlash > 0 && Math.floor(this.hurtFlash * 30) % 2 === 0) {
         ctx.globalAlpha = 0.65;
@@ -486,6 +495,7 @@ const ENT = (() => {
       ctx.save();
       if (this.inWater) ctx.globalAlpha *= 0.86;
       ctx.translate(px, py);
+      ctx.scale(PLAYER_SPRITE_SCALE, PLAYER_SPRITE_SCALE);
       if (this.hurtFlash > 0) ctx.rotate(Math.sin(this.hurtFlash * 50) * 0.05);
       ctx.drawImage(img, -img.width / 2, -img.height);
       ctx.restore();
@@ -501,7 +511,7 @@ const ENT = (() => {
         else if (it.swing === 'stab') ang = -0.15;
         else ang = -1.2 + Math.sin(t * Math.PI) * 2.3;
         ctx.save();
-        ctx.translate(px + this.dir * 5, py - 25);
+        ctx.translate(px + this.dir * 5, py - 20);
         ctx.scale(this.dir, 1);
         ctx.rotate(ang);
         ctx.drawImage(ic, 3, -ic.height / 2);
