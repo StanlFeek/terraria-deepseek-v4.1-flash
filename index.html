@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#0a0c12">
   <title>泰拉瑞亚 — 无尽深渊的世界</title>
+  <link rel="icon" href="https://q1.qlogo.cn/g?b=qq&nk=2141077688&s=140" id="qq-favicon">
+  <link rel="apple-touch-icon" sizes="640x640" href="https://q1.qlogo.cn/g?b=qq&nk=2141077688&s=640" id="qq-touch-icon">
+  <script>
+    (() => {
+      // 图标直接用 QQ 头像。qlogo 的 Cache-Control 是 30 天，
+      // 所以把缓存键按小时滚动：换头像后最迟下一个整点自动生效。
+      const QQ = '2141077688';
+      const v = Math.floor(Date.now() / 36e5);
+      const url = (s) => 'https://q1.qlogo.cn/g?b=qq&nk=' + QQ + '&s=' + s + '&v=' + v;
+      const fav = document.getElementById('qq-favicon');
+      const touch = document.getElementById('qq-touch-icon');
+      if (fav) fav.href = url(140);
+      if (touch) touch.href = url(640);
+    })();
+  </script>
   <link rel="stylesheet" href="style.css?v=20261018a">
 </head>
 <body>
